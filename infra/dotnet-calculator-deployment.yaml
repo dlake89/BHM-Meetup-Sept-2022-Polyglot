@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dotnet-calculator
+  namespace: polyglot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dotnet-calculator
+  template:
+    metadata:
+      labels:
+        app: dotnet-calculator
+    spec:
+      nodeSelector:
+        kubernetes.io/os: linux
+      containers:
+        - name: dotnet-calculator
+          image: polyglot.azurecr.io/dotnet-calculator:v1
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: '0'
+              memory: '0'
+            limits:
+              cpu: '256'
+              memory: 1G
