@@ -1,8 +1,14 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+@model BHM_Meetup_Sept_2022_Polyglot.Controllers.MultiplicationValues
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Simple Calculator</h1>
+    <p>On submit it calls the go-multiplication service.</p>
+    <form asp-controller="Home" asp-action="Multiply" method="post">
+        <input type="text" placeholder="a" asp-for="a">X
+        <input type="text" placeholder="b" asp-for="b">
+        <input type="submit" value="submit">
+    </form>
 </div>

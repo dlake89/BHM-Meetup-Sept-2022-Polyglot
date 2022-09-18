@@ -18,6 +18,17 @@ public class HomeController : Controller
         return View();
     }
 
+    [HttpPost]
+    public IActionResult Multiply(MultiplicationValues multiplier) 
+    {
+        var a = multiplier.a;
+        var b = multiplier.b;
+
+        
+        
+        return View("Index");
+    }
+
     public IActionResult Privacy()
     {
         return View();
@@ -28,4 +39,10 @@ public class HomeController : Controller
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
+}
+
+public class MultiplicationValues 
+{
+    public string a  { get; set; }
+    public string b  { get; set; }
 }
