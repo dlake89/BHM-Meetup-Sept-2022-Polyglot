@@ -1,32 +1,38 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using BHM_Meetup_Sept_2022_Polyglot.Models;
-
+using System.Text.Json;
+using System.Text;
 namespace BHM_Meetup_Sept_2022_Polyglot.Controllers;
 
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
-
-    public HomeController(ILogger<HomeController> logger)
+    private readonly IHttpClientFactory _clientFactory;
+    public HomeController(ILogger<HomeController> logger, IHttpClientFactory clientFactory)
     {
         _logger = logger;
+        _clientFactory = clientFactory;
     }
 
-    public IActionResult Index()
+    public IActionResult Index(MultiplicationValues? values)
     {
-        return View();
+        return View(values);
     }
 
     [HttpPost]
-    public IActionResult Multiply(MultiplicationValues multiplier) 
+    public async Task<IActionResult> Multiply(MultiplicationValues multiplier)
     {
-        var a = multiplier.a;
-        var b = multiplier.b;
+        HttpClient? httpClient = _clientFactory.CreateClient();
 
-        
-        
-        return View("Index");
+        using var response = await httpClient.PostAsync("http://go-multiplication:8080/multiply",
+         new StringContent(JsonSerializer.Serialize(multiplier), Encoding.UTF8, "application/json"));
+
+        using var contentStream = await response.Content.ReadAsStreamAsync();
+
+        var multiplicationAnswer = await JsonSerializer.DeserializeAsync<MultiplicationValues>(contentStream);
+
+        return View("Index", multiplicationAnswer);
     }
 
     public IActionResult Privacy()
@@ -41,8 +47,9 @@ public class HomeController : Controller
     }
 }
 
-public class MultiplicationValues 
+public class MultiplicationValues
 {
-    public string a  { get; set; }
-    public string b  { get; set; }
+    public float a { get; set; }
+    public float b { get; set; }
+    public float answer { get; set; }
 }

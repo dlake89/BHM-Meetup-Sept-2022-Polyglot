@@ -17,7 +17,7 @@ spec:
         kubernetes.io/os: linux
       containers:
         - name: dotnet-calculator
-          image: polyglot.azurecr.io/dotnet-calculator:v1
+          image: polyglot.azurecr.io/dotnet-calculator:v2
           ports:
             - containerPort: 80
           resources:
